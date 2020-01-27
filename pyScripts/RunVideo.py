@@ -7,6 +7,7 @@ import os
 import pyScripts.FindMovement as FindMovement
 import FindTable
 
+print("helloGithub")
 
 class VIDEO:
     def __init__(self, vidName: str, tableName: str, outputName: str):
