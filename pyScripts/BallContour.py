@@ -3,7 +3,8 @@ A single Contour of a moving object
 29-01-2020 """
 import numpy as np
 import FindTable
-
+import cv2
+from colr import color
 
 class BALLCONTOUR:
     def __init__(self, x: int, y: int, w: int, h: int, frame):
@@ -20,7 +21,10 @@ class BALLCONTOUR:
         :return: bool
         """
         self.getContourColour()
-        return self.checkColourInRange()
+        # print(color('██████    ' + str(self.colour) + '    ' + str(self.checkColourInRange()),
+        #            fore=self.colour, back=(0, 0, 0)))
+        if self.checkColourInRange():
+            return self.checkColourInRange()
 
     def getContourColour(self) -> np.array:
         """
@@ -54,9 +58,9 @@ class BALLCONTOUR:
         if y < self.frameHeight and x < self.frameWidth:
             pixelColour = self.frame[y, x]
 
-            self.colour = [self.colour[0] + pixelColour[0],
+            self.colour = [self.colour[0] + pixelColour[2],
                            self.colour[1] + pixelColour[1],
-                           self.colour[2] + pixelColour[2]]
+                           self.colour[2] + pixelColour[0]]
             self.pixelCount += 1
 
     def checkColourInRange(self) -> bool:

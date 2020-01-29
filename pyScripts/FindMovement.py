@@ -44,6 +44,8 @@ class MOVEMENT:
         for contour in self.contours:
             (x, y, w, h) = cv2.boundingRect(contour)
             ballContour = BallContour.BALLCONTOUR(x, y, w, h, self.frame1)
-            print(ballContour.isBall())
+            if ballContour.isBall():
+                self.balls.append(ballContour)
+
 
 

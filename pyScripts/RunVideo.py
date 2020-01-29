@@ -34,7 +34,7 @@ class VIDEO:
         while self.cap.isOpened():
 
             self.nextFrame()
-            self.getContours(True)
+            self.getBallContours(True)
             self.displayVideo()
 
             # Allow Escape
@@ -60,18 +60,29 @@ class VIDEO:
         self.out.write(image)
         cv2.imshow("PoolVideo", self.frame1)
 
-    def getContours(self, drawContours: bool):
+    def getBallContours(self, drawContours: bool):
+        """
+        Draws the contour of a ball
+        :param drawContours: bool
+        :return: None
+        """
+        if drawContours:
+            self.movement.getContours(self.frame1, self.frame2)
+            for ball in self.movement.balls:
+                cv2.rectangle(self.frame1, (ball.x, ball.y), (ball.x + ball.w, ball.y + ball.h), (0, 255, 0), 2)
+
+    def getAllContours(self, drawContours: bool):
         """
         Gets all the contour lines of moving objects
         :param drawContours:
         :return: None
         """
-        self.movement.getContours(self.frame1, self.frame2)
         if drawContours:
+            self.movement.getContours(self.frame1, self.frame2)
             for contour in self.movement.contours:
-                self.drawContour(contour, 1000)
+                self.drawContour(contour)
 
-    def drawContour(self, contour, maxBallSize):
+    def drawContour(self, contour):
         """
         Draws the contours of the lines live
         :param contour: list of all contour objects
@@ -80,7 +91,7 @@ class VIDEO:
         """
         (x, y, w, h) = cv2.boundingRect(contour)
 
-        if cv2.contourArea(contour) < maxBallSize:
+        if cv2.contourArea(contour):
             cv2.rectangle(self.frame1, (x, y), (x + w, y + h), (0, 255, 0), 2)
             cv2.putText(self.frame1, "Status: {}".format('Movement'), (10, 20), cv2.FONT_HERSHEY_SIMPLEX, 1,
                         (0, 0, 255), 3)
