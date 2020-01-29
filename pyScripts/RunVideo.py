@@ -7,7 +7,6 @@ import os
 import pyScripts.FindMovement as FindMovement
 import FindTable
 
-print("helloGithub")
 
 class VIDEO:
     def __init__(self, vidName: str, tableName: str, outputName: str):
@@ -22,7 +21,6 @@ class VIDEO:
 
         # Processing Classes
         self.movement = FindMovement.MOVEMENT(self.frame1, self.frame2)
-        # self.table = FindTable.TABLE(tableName)
 
         # Make Output
         fourcc = cv2.VideoWriter_fourcc('X', 'V', 'I', 'D')
@@ -71,9 +69,9 @@ class VIDEO:
         self.movement.getContours(self.frame1, self.frame2)
         if drawContours:
             for contour in self.movement.contours:
-                self.drawContours(contour, 1000)
+                self.drawContour(contour, 1000)
 
-    def drawContours(self, contour, maxBallSize):
+    def drawContour(self, contour, maxBallSize):
         """
         Draws the contours of the lines live
         :param contour: list of all contour objects
@@ -104,7 +102,7 @@ def getVidAddress(vidName: str):
     :return: None
     """
     thisPath = os.path.dirname(os.path.realpath(__file__))
-    return thisPath + '\\videos\\' + vidName
+    return thisPath[:len(thisPath) - 9] + '\\videos\\' + vidName
 
 
 def getOuputAddress(outVidName: str):
@@ -114,4 +112,4 @@ def getOuputAddress(outVidName: str):
     :return:None
     """
     thisPath = os.path.dirname(os.path.realpath(__file__))
-    return thisPath + '\\output\\' + outVidName + '.avi'
+    return thisPath[:len(thisPath) - 9] + '\\output\\' + outVidName + '.avi'  # -9 to get one folder higher

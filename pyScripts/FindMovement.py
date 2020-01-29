@@ -2,6 +2,8 @@
 Finds the movement of the balls
 25/01/2020 """
 import cv2
+import pyScripts.BallContour as BallContour
+import FindTable
 
 
 class MOVEMENT:
@@ -12,7 +14,9 @@ class MOVEMENT:
         :param frame2: frame
         """
         self.frame1 = frame1; self.frame2 = frame2
-        self.contours = -1
+        self.contours = []
+        self.frameHeight, self.frameWidth, _ = self.frame1.shape
+        self.balls = []
 
     def getContours(self, frame1, frame2) -> list:
         """
@@ -27,4 +31,19 @@ class MOVEMENT:
         _, thresh = cv2.threshold(blur, 20, 255, cv2.THRESH_BINARY)
         dilated = cv2.dilate(thresh, None, iterations=3)  # Sensitivity
         self.contours, _ = cv2.findContours(dilated, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+
+        self.updateBalls()
         return self.contours
+
+    def updateBalls(self):
+        """
+        Updates the list of balls on the table
+        :return: None
+        """
+        self.balls = []
+        for contour in self.contours:
+            (x, y, w, h) = cv2.boundingRect(contour)
+            ballContour = BallContour.BALLCONTOUR(x, y, w, h, self.frame1)
+            print(ballContour.isBall())
+
+
