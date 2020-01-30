@@ -1,47 +1,33 @@
 """
- Runs the video and documents the times
+ Runs the video and gets video data
  25/01/2020"""
 
 import cv2
 import os
 import pyScripts.FindMovement as FindMovement
-import FindTable
+import pyScripts.FrameList as FrameList
 
 
 class VIDEO:
-    def __init__(self, vidName: str, tableName: str, outputName: str):
+    def __init__(self, vidName: str, outputName: str):
         """
         Processes the video and produces output
         :param vidName: str
         :param outputName: str
         """
+        print('Loading in video...')
         self.cap = cv2.VideoCapture(getVidAddress(vidName))
         ret, self.frame1 = self.cap.read()
         ret, self.frame2 = self.cap.read()
+        self.frameNum = 1
 
         # Processing Classes
         self.movement = FindMovement.MOVEMENT(self.frame1, self.frame2)
+        self.frameData = FrameList.FRAMELIST()
 
         # Make Output
         fourcc = cv2.VideoWriter_fourcc('X', 'V', 'I', 'D')
         self.out = cv2.VideoWriter(getOuputAddress(outputName), fourcc, 5.0, (1280, 720))
-
-    def process(self):
-        """
-        Processes the video and saves an analyzed version in the output folder
-        :return: None
-        """
-        while self.cap.isOpened():
-
-            self.nextFrame()
-            self.getBallContours(True)
-            self.displayVideo()
-
-            # Allow Escape
-            if cv2.waitKey(40) == 27:
-                break
-
-        self.closeVideo()
 
     def nextFrame(self):
         """
@@ -50,6 +36,7 @@ class VIDEO:
         """
         self.frame1 = self.frame2
         ret, self.frame2 = self.cap.read()
+        self.frameNum += 1
 
     def displayVideo(self):
         """
@@ -60,14 +47,25 @@ class VIDEO:
         self.out.write(image)
         cv2.imshow("PoolVideo", self.frame1)
 
+    def checkFrameList(self, drawBalls: bool, lenFrameList: int):
+        """
+        Checks for ball movement and updates the frame list object
+        :param drawBalls: bool
+        :param lenFrameList: int
+        :return: None
+        """
+        self.getBallContours(drawBalls)
+        isBallMovement = len(self.movement.balls) > 0
+        self.frameData.popFrame(isBallMovement, lenFrameList)
+
     def getBallContours(self, drawContours: bool):
         """
         Draws the contour of a ball
         :param drawContours: bool
         :return: None
         """
+        self.movement.getContours(self.frame1, self.frame2)
         if drawContours:
-            self.movement.getContours(self.frame1, self.frame2)
             for ball in self.movement.balls:
                 cv2.rectangle(self.frame1, (ball.x, ball.y), (ball.x + ball.w, ball.y + ball.h), (0, 255, 0), 2)
 
