@@ -3,27 +3,31 @@ The mother board of the operation.
 30-01-2020 """
 
 import cv2
-import pyScripts.VideoData as RunVideo
+import os
+import processingScripts.VideoData as RunVideo
+import processingScripts.LoadBar as LoadBar
+import editingScripts.CutTimesWriter as CutTimesWriter
 
 
 class MOTHERBOARD:
-    def __init__(self, video: RunVideo.VIDEO, numFramesCount: int, ballMovingThreshold: float, isdrawContours: bool):
+    def __init__(self, video: RunVideo.VIDEO, numFramesCount: int, ballMovingThreshold: float, isDrawContours: bool):
         """
         Makes the main frame work that analyzes the video
         :param video:
         :param numFramesCount: int
         :param ballMovingThreshold: int
-        :param isdrawContours: bool
+        :param isDrawContours: bool
         :return None
         """
         # Processing info
         self.video = video
-        self.numFramesCount, self.ballMovingThreshold, self.isdrawContours \
-            = numFramesCount, ballMovingThreshold, isdrawContours
+        self.numFramesCount, self.ballMovingThreshold, self.isDrawContours \
+            = numFramesCount, ballMovingThreshold, isDrawContours
 
         # Processing Data
         self.ballsMoving = False
         self.cutTimes = []
+        self.cutTimeWriter = CutTimesWriter.CUTTIMEWRITER()
 
     def processVideo(self):
         """
@@ -31,12 +35,14 @@ class MOTHERBOARD:
         All the information that relates to shot analysis sensitivity is in the parameters here
         :return: None
         """
-        print('Processing Video...')
+        loadingBar = LoadBar.LOADBAR('|--------------- Processing Video ---------------|', self.video)
+
         while self.video.cap.isOpened():
             self.video.nextFrame()
             self.updateCutTimes()
-            self.video.displayVideo()
 
+            loadingBar.updateBar(self.video.frameNum)
+            # self.video.displayVideo()
             if cv2.waitKey(40) == 27:
                 break
 
@@ -48,17 +54,22 @@ class MOTHERBOARD:
         It then updates the cut times list
         :return: None
         """
-        self.video.checkFrameList(self.isdrawContours, self.numFramesCount)
+        self.video.checkFrameList(self.isDrawContours, self.numFramesCount)
         # Update Cut Times
         if self.video.frameData.isBallMoving(self.ballMovingThreshold) and not self.ballsMoving:
             self.ballsMoving = True
-            self.cutTimes.append(self.video.frameNum)
-            print(self.cutTimes)
+            self.addCutTime()
         elif not self.video.frameData.isBallMoving(self.ballMovingThreshold) and self.ballsMoving:
             self.ballsMoving = False
-            self.cutTimes.append(self.video.frameNum)
-            print(self.cutTimes)
+            self.addCutTime()
 
+    def addCutTime(self):
+        """
+        Adds cut time data to table and list
+        :return: None
+        """
+        self.cutTimes.append(self.video.frameNum)
+        self.cutTimeWriter.wrie(self.video.frameNum, self.ballsMoving)
 
 
 

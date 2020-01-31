@@ -3,8 +3,8 @@ A single Contour of a moving object
 29-01-2020 """
 import numpy as np
 import FindTable
-import cv2
 from colr import color
+
 
 class BALLCONTOUR:
     def __init__(self, x: int, y: int, w: int, h: int, frame):

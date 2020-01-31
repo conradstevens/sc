@@ -1,7 +1,7 @@
 """
 Keeps track of the most recent frames and determines what time is considered shot time
 29-01-2020 """
-import pyScripts.BallContour as BallContour
+import processingScripts.BallContour as BallContour
 
 class FRAMELIST:
     def __init__(self):

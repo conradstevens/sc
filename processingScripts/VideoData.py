@@ -4,8 +4,8 @@
 
 import cv2
 import os
-import pyScripts.FindMovement as FindMovement
-import pyScripts.FrameList as FrameList
+import processingScripts.FindMovement as FindMovement
+import processingScripts.FrameList as FrameList
 
 
 class VIDEO:
@@ -111,7 +111,7 @@ def getVidAddress(vidName: str):
     :return: None
     """
     thisPath = os.path.dirname(os.path.realpath(__file__))
-    return thisPath[:len(thisPath) - 9] + '\\videos\\' + vidName
+    return thisPath[:len(thisPath) - 18] + '\\videos\\' + vidName  # Careful when changing folder names
 
 
 def getOuputAddress(outVidName: str):
@@ -121,4 +121,4 @@ def getOuputAddress(outVidName: str):
     :return:None
     """
     thisPath = os.path.dirname(os.path.realpath(__file__))
-    return thisPath[:len(thisPath) - 9] + '\\output\\' + outVidName + '.avi'  # -9 to get one folder higher
+    return thisPath[:len(thisPath) - 18] + '\\output\\' + outVidName + '.avi'  # Careful when changing folder names

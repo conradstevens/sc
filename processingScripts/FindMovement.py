@@ -2,7 +2,7 @@
 Finds the movement of the balls
 25/01/2020 """
 import cv2
-import pyScripts.BallContour as BallContour
+import processingScripts.BallContour as BallContour
 import FindTable
 
 
