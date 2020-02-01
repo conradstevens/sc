@@ -20,6 +20,7 @@ class VIDEO:
         ret, self.frame1 = self.cap.read()
         ret, self.frame2 = self.cap.read()
         self.frameNum = 1
+        self.fps = int(self.cap.get(cv2.CAP_PROP_FPS))
 
         # Processing Classes
         self.movement = FindMovement.MOVEMENT(self.frame1, self.frame2)

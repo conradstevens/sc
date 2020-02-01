@@ -3,7 +3,6 @@ The mother board of the operation.
 30-01-2020 """
 
 import cv2
-import os
 import processingScripts.VideoData as RunVideo
 import processingScripts.LoadBar as LoadBar
 import editingScripts.CutTimesWriter as CutTimesWriter

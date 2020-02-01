@@ -17,8 +17,8 @@ class CUTTIMEWRITER:
         :param isBallMoving: bool
         :return: None
         """
-        self.cutWriter = open((os.path.dirname(os.path.realpath(__file__)) + '\\CutTimesTable'), "a")
-        self.cutWriter.write(str(frame) + '; ' + str(isBallMoving) + '\n')
+        self.cutWriter = open((os.path.dirname(os.path.realpath(__file__)) + '\\CutTimesTable.csv'), "a")
+        self.cutWriter.write(str(frame) + ';' + str(isBallMoving) + '\n')
         self.cutWriter.close()
 
 
