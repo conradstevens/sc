@@ -22,7 +22,7 @@ class BALLCONTOUR:
         """
         self.getContourColour()
         # print(color('██████    ' + str(self.colour) + '    ' + str(self.checkColourInRange()),
-        #            fore=self.colour, back=(0, 0, 0)))
+        #            fore=self.colour))
         if self.checkColourInRange():
             return self.checkColourInRange()
 

@@ -9,7 +9,8 @@ import processingScripts.FrameList as FrameList
 
 
 class VIDEO:
-    def __init__(self, vidName: str, outputName: str):
+    def __init__(self, vidName: str, outputName: str, minBallSize: int, maxBallSize: int, videoSensitivity: float,
+                 drawAllContour: bool):
         """
         Processes the video and produces output
         :param vidName: str
@@ -17,13 +18,16 @@ class VIDEO:
         """
         print('Loading in video...')
         self.cap = cv2.VideoCapture(getVidAddress(vidName))
+        self.fps = int(self.cap.get(cv2.CAP_PROP_FPS))
+        self.minBallSize, self.maxBallSize = minBallSize, maxBallSize
+        self.drawAllContour = drawAllContour
+        self.frameNum = 1
+        self.numFrames = int(self.cap.get(cv2.CAP_PROP_FRAME_COUNT))
         ret, self.frame1 = self.cap.read()
         ret, self.frame2 = self.cap.read()
-        self.frameNum = 1
-        self.fps = int(self.cap.get(cv2.CAP_PROP_FPS))
 
         # Processing Classes
-        self.movement = FindMovement.MOVEMENT(self.frame1, self.frame2)
+        self.movement = FindMovement.MOVEMENT(self.frame1, self.frame2, minBallSize, maxBallSize, videoSensitivity)
         self.frameData = FrameList.FRAMELIST()
 
         # Make Output
@@ -55,6 +59,9 @@ class VIDEO:
         :param lenFrameList: int
         :return: None
         """
+        if self.drawAllContour:
+            self.getAllContours(True)
+
         self.getBallContours(drawBalls)
         isBallMovement = len(self.movement.balls) > 0
         self.frameData.popFrame(isBallMovement, lenFrameList)
@@ -68,7 +75,7 @@ class VIDEO:
         self.movement.getContours(self.frame1, self.frame2)
         if drawContours:
             for ball in self.movement.balls:
-                cv2.rectangle(self.frame1, (ball.x, ball.y), (ball.x + ball.w, ball.y + ball.h), (0, 255, 0), 2)
+                cv2.rectangle(self.frame1, (ball.x, ball.y), (ball.x + ball.w, ball.y + ball.h), (0, 0, 255), 2)
 
     def getAllContours(self, drawContours: bool):
         """
@@ -90,7 +97,8 @@ class VIDEO:
         """
         (x, y, w, h) = cv2.boundingRect(contour)
 
-        if cv2.contourArea(contour):
+        if (cv2.contourArea(contour) and
+                self.minBallSize < w < self.maxBallSize and self.minBallSize < h < self.maxBallSize):
             cv2.rectangle(self.frame1, (x, y), (x + w, y + h), (0, 255, 0), 2)
             cv2.putText(self.frame1, "Status: {}".format('Movement'), (10, 20), cv2.FONT_HERSHEY_SIMPLEX, 1,
                         (0, 0, 255), 3)

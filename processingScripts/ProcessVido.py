@@ -9,7 +9,8 @@ import editingScripts.CutTimesWriter as CutTimesWriter
 
 
 class MOTHERBOARD:
-    def __init__(self, video: RunVideo.VIDEO, numFramesCount: int, ballMovingThreshold: float, isDrawContours: bool):
+    def __init__(self, video: RunVideo.VIDEO, numFramesCount: int, ballMovingThreshold: float,
+                 isDrawContours: bool, playVideo):
         """
         Makes the main frame work that analyzes the video
         :param video:
@@ -20,6 +21,7 @@ class MOTHERBOARD:
         """
         # Processing info
         self.video = video
+        self.playVideo = playVideo
         self.numFramesCount, self.ballMovingThreshold, self.isDrawContours \
             = numFramesCount, ballMovingThreshold, isDrawContours
 
@@ -38,12 +40,14 @@ class MOTHERBOARD:
 
         while self.video.cap.isOpened():
             self.video.nextFrame()
-            self.updateCutTimes()
-
-            loadingBar.updateBar(self.video.frameNum)
-            # self.video.displayVideo()
-            if cv2.waitKey(40) == 27:
+            if cv2.waitKey(40) == 27 or self.video.frameNum >= self.video.numFrames:
                 break
+
+            self.updateCutTimes()
+            loadingBar.updateBar(self.video.frameNum)
+
+            if self.playVideo:
+                self.video.displayVideo()
 
         self.video.closeVideo()
 

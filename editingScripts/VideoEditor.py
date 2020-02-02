@@ -22,7 +22,7 @@ class VIDEOEDDITOR:
         # Basic data
         print('Loading Editing Data...')
         self.cutData = pd.read_csv(
-                                    os.path.dirname(os.path.realpath(__file__)) + '\\CutTimesTable.csv',
+                                    os.path.dirname(os.path.realpath(__file__)) + '\\CutTimesTable.txt',
                                     delimiter=';',
                                     names=['frameNum', 'isBallMoving'])
         self.fps = fps
@@ -44,7 +44,6 @@ class VIDEOEDDITOR:
         print('Editing Video...')
         self.makeClipList()
         outPut = mpEditor.CompositeVideoClip(self.clipList)
-        #print(os.path.dirname(os.path.realpath(__file__)) + '\\' + self.exportName)
         outPut.write_videofile(self.exportName, codec='libx264')
 
     def makeClipList(self):

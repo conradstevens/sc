@@ -12,7 +12,7 @@ class LOADBAR:
         """
         Prints a load bar in console
         """
-        self.numFrames = int(video.cap.get(cv2.CAP_PROP_FRAME_COUNT))
+        self.numFrames = video.numFrames
         self.frameCount = 0
         self.loadBarCount = 0  # Maxes out at maxBarLen
         self.maxLenBar = len(barMessage)
