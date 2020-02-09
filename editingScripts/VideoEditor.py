@@ -51,7 +51,6 @@ class VIDEOEDDITOR:
         Generates all the clips that will be concatenated to generate the video
         :return: None
         """
-
         for t in self.cutData.itertuples():
             self.lastFrame = self.thisFrame
             self.thisFrame = t.frameNum
@@ -65,9 +64,11 @@ class VIDEOEDDITOR:
         :param isFastForwards: bool
         :return: mpClip.Clip
         """
-        clip = mpClip.Clip.subclip(self.originalVideo, self.fps2Sec(frame1), self.fps2Sec(frame2))
+        frame1Time, frame2Time = self.fps2Sec(frame1), self.fps2Sec(frame2)
+
+        clip = mpClip.Clip.subclip(self.originalVideo, frame1Time, frame2Time)
         if isFastForwards:
-            newTime = 0.5*(frame2 - frame1)  # double speed
+            newTime = 0.5*(frame2Time - frame1Time)  # double speed
             clip = accel_decel.accel_decel(clip, newTime, 1, 1)
 
         return clip
@@ -78,5 +79,5 @@ class VIDEOEDDITOR:
         :param frameNum: int
         :return: int
         """
-        return np.floor(frameNum / self.fps)
+        return frameNum / self.fps
 

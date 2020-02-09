@@ -21,9 +21,9 @@ class BALLCONTOUR:
         :return: bool
         """
         self.getContourColour()
-        # print(color('██████    ' + str(self.colour) + '    ' + str(self.checkColourInRange()),
-        #            fore=self.colour))
         if self.checkColourInRange():
+        #    print(color('██████    ' + str(self.colour) + '    ' + str(self.checkColourInRange()),
+        #                fore=self.colour))
             return self.checkColourInRange()
 
     def getContourColour(self) -> np.array:

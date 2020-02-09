@@ -32,7 +32,7 @@ class VIDEO:
 
         # Make Output
         fourcc = cv2.VideoWriter_fourcc('X', 'V', 'I', 'D')
-        self.out = cv2.VideoWriter(getOuputAddress(outputName), fourcc, 5.0, (1280, 720))
+        self.out = cv2.VideoWriter(outputName, fourcc, 5.0, (1280, 720))
 
     def nextFrame(self):
         """
@@ -121,13 +121,3 @@ def getVidAddress(vidName: str):
     """
     thisPath = os.path.dirname(os.path.realpath(__file__))
     return thisPath[:len(thisPath) - 18] + '\\videos\\' + vidName  # Careful when changing folder names
-
-
-def getOuputAddress(outVidName: str):
-    """
-    Returns the address of the location where the processed video will be saved
-    :param outVidName: str
-    :return:None
-    """
-    thisPath = os.path.dirname(os.path.realpath(__file__))
-    return thisPath[:len(thisPath) - 18] + '\\output\\' + outVidName + '.avi'  # Careful when changing folder names

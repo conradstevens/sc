@@ -11,28 +11,30 @@ import editingScripts.VideoEditor as VideoEdditor
 if __name__ == '__main__':
     # Names and dirs
     input_video             = 'MaxEveryVid.mp4'
-    process_output_video    = 'outputProcessVid'
-    export_name             = 'outputProcessVid.mp4'
+    process_output_video    = 'outputProcessVid.mp4'
+    export_name             = 'OutputVid.mp4'
 
     # Nobs and Daile
-    num_frames_analyzed     = 6
-    percent_frames_cut_off  = 0.5
-    movement_sensitivity    = 5
+    num_frames_analyzed     = 29
+    percent_frames_cut_off  = 0.8
+    movement_sensitivity    = 2
     min_ball_size           = 25
-    max_ball_size           = 90
+    max_ball_size           = 100
 
     # What To Draw
     draw_all_contours       = False
     draw_ball_contours      = True
-    play_video_as_loading   = True
+    play_video_as_loading   = False
 
     # Engine
     video = RunVideo.VIDEO(input_video, process_output_video, min_ball_size,
                            max_ball_size, movement_sensitivity, draw_all_contours)
 
-    # motherBoard = ProcessVideo.MOTHERBOARD(video, 5, 0.5, draw_ball_contours, play_video_as_loading)
-    # motherBoard.processVideo()
-    videoEditor = VideoEdditor.VIDEOEDDITOR('MaxEveryVid.mp4', export_name, 30)
+    #motherBoard = ProcessVideo.MOTHERBOARD(video, num_frames_analyzed, percent_frames_cut_off,
+    #                                       draw_ball_contours, play_video_as_loading)
+
+    #motherBoard.processVideo()
+    videoEditor = VideoEdditor.VIDEOEDDITOR(input_video, export_name, video.fps)
     videoEditor.editVideo()
 
 
